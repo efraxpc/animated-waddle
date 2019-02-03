@@ -29,9 +29,11 @@ class ModalAddEdit extends React.Component {
     checkedF: true
   }
   onSubmit = values => {
+    console.log(values);
+    console.log(this.state);
     const { loginAction, dispatch, reset } = this.props
     dispatch(reset('todo'))
-    loginAction(values)
+    //loginAction(values)
   }
   handleChange = name => event => {
     this.setState({ [name]: event.target.checked })
@@ -90,10 +92,11 @@ class ModalAddEdit extends React.Component {
                         <FormControlLabel
                           control={
                             <Switch
-                              checked={this.state.checkedA}
-                              onChange={this.handleChange('checkedA')}
-                              value="checkedA"
+                              checked={this.state.checkedB}
+                              onChange={this.handleChange('checkedB')}
+                              value="checkedB"
                               color="secondary"
+                              name={'atention'}
                             />
                           }
                           label="Atención"
