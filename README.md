@@ -1,2 +1,2 @@
-* Tutorial: Maps React application
+* Maps React application
 
