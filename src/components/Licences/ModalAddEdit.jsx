@@ -44,9 +44,7 @@ class ModalAddEdit extends React.Component {
   state = {
     selectedDate: new Date()
   }
-
   handleDateChange = date => {
-    console.log(date);
     this.setState({ selectedDate: date })
   }
   onSubmit = async values => {
@@ -79,7 +77,7 @@ class ModalAddEdit extends React.Component {
           maxWidth={'md'}
           fullWidth={true}
           aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Grupos de LABOCER SA</DialogTitle>
+          <DialogTitle id="form-dialog-title">Licencias de LABOCER SA</DialogTitle>
           <form onSubmit={handleSubmit(this.onSubmit)}>
             <DialogContent>
               <Row>

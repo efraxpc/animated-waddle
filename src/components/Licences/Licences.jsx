@@ -31,6 +31,11 @@ class Licences extends Component {
     const { fetchUsers } = this.props
     await fetchUsers()
   }
+
+  async componentDidMount() {
+    const { fetchUsers } = this.props
+    await fetchUsers()
+  }
   render() {
     
     const { classes, users, fetchUsers, saveLicence } = this.props
