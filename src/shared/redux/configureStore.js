@@ -8,6 +8,8 @@ import { routerMiddleware } from 'connected-react-router'
 import rootReducer from '../reducers';
 export const history = createBrowserHistory()
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 export default function configureStore(initialState) {
   const middleware = [
     thunk
@@ -15,10 +17,10 @@ export default function configureStore(initialState) {
   const store = createStore(
     rootReducer(history), // root reducer with router state
     initialState,
-    compose(
+    composeEnhancers(
       applyMiddleware(
         routerMiddleware(history), // for dispatching history actions
-        thunk
+        thunk,
       ),
     ),
   )

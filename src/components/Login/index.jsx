@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { loginUser } from '../../actions/coinsActions'
+import { loginUser } from '../../actions/usersActions'
 import { bindActionCreators } from 'redux'
 // Components
 import LoginForm from './LoginForm'
@@ -8,7 +8,7 @@ import LoginForm from './LoginForm'
 class Login extends Component {
   loginUser = async values => {
     await this.props.loginUser(values)
-    if (this.props.coins.user) {
+    if (this.props.users.user) {
       this.props.history.push('/')
     }
   }
@@ -22,8 +22,8 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = ({ coins }) => ({
-  coins
+const mapStateToProps = ({ users }) => ({
+  users
 })
 
 const mapDispatchToProps = dispatch =>

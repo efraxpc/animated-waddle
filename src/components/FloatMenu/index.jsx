@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import FloatMenu from './FloatMenu';
 
 // Actions
-import { loginUser } from '../../actions/coinsActions';
+import { loginUser } from '../../actions/usersActions';
 
 const mapStateToProps = ({ coins }) => ({
   coins

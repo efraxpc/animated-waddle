@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { loginUser } from '../../actions/coinsActions'
+import { loginUser } from '../../actions/usersActions'
 import { bindActionCreators } from 'redux'
 import Cookies from 'universal-cookie'
 import SimpleMenu from './SimpleMenu'
