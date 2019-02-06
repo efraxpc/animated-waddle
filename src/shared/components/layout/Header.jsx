@@ -13,7 +13,8 @@ import FormGroup from '@material-ui/core/FormGroup'
 import MenuItem from '@material-ui/core/MenuItem'
 import Menu from '@material-ui/core/Menu'
 import SimpleMenu from '../../../components/SimpleMenu'
-import { FaCogs } from 'react-icons/fa'
+import { FaCogs, FaFileAlt, FaHome } from 'react-icons/fa'
+import { withRouter } from 'react-router'
 
 const styles = {
   root: {
@@ -34,6 +35,14 @@ const menuContentConfig = {
     link: '/groups',
   }]
 }
+const menuContentConfigLicences = {
+  name: 'licences',
+  subMenus: [{
+    name:'Licencias',
+    link: '/licences',
+  }]
+}
+
 
 class Header extends React.Component {
   state = {
@@ -62,9 +71,20 @@ class Header extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <p>logo</p>
+            <a href="#"
+            onClick={(e)=>{
+              e.preventDefault()
+              this.props.history.push('/')
+            }}
+            >
+            <FaHome size={'2em'} 
+            color={"white"}/>
+            </a>
             <SimpleMenu info={menuContentConfig}>
               <FaCogs />
+            </SimpleMenu>
+            <SimpleMenu info={menuContentConfigLicences}>
+              <FaFileAlt />
             </SimpleMenu>
             {auth && (
               <div>
@@ -104,4 +124,4 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(Header)
+export default withRouter(withStyles(styles)(Header))
