@@ -16,7 +16,7 @@ export const saveLicence = params => dispatch => {
   const user = cookies.get('user')
   const tokenStr = user.token
   dispatch(received(SAVE_LICENCE_REQUEST))
-  const { id } = params
+  const { id, dueDate } = params
   const axiosData = {
     method: 'POST',
     url: 'http://localhost:3001/v1/licences/',
@@ -27,7 +27,7 @@ export const saveLicence = params => dispatch => {
     },
     data: {
       id,
-      dueDate: '04/04/2017',
+      dueDate,
       user
     }
   }

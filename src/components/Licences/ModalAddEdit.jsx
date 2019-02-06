@@ -4,12 +4,14 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import FormControl from '@material-ui/core/FormControl'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
 import { Field, reduxForm } from 'redux-form'
 import { Row, Col } from 'react-bootstrap'
 import Select from '@material-ui/core/Select'
 import FormHelperText from '@material-ui/core/FormHelperText'
+import MomentUtils from '@date-io/moment'
+import { MuiPickersUtilsProvider } from 'material-ui-pickers'
+import { DatePicker } from 'material-ui-pickers'
+import moment from 'moment'
 
 const renderFromHelper = ({ touched, error }) => {
   if (!(touched && error)) {
@@ -18,13 +20,6 @@ const renderFromHelper = ({ touched, error }) => {
     return <FormHelperText>{touched && error}</FormHelperText>
   }
 }
-
-const CustomTextField = ({ input, label, type }) => (
-  <FormControl margin="normal" required fullWidth>
-    <InputLabel htmlFor="email">{label}</InputLabel>
-    <Input type={type} {...input} />
-  </FormControl>
-)
 const renderSelectField = ({
   input,
   label,
@@ -46,13 +41,24 @@ const renderSelectField = ({
   </FormControl>
 )
 class ModalAddEdit extends React.Component {
-  onSubmit = values => {
+  state = {
+    selectedDate: new Date()
+  }
+
+  handleDateChange = date => {
+    console.log(date);
+    this.setState({ selectedDate: date })
+  }
+  onSubmit = async values => {
     const {
       dispatch,
       reset,
-      data: { saveLicence }
+      data: { saveLicence, handleClose }
     } = this.props
-    saveLicence({id:values.user})
+    const { selectedDate } = this.state
+    const dueDate = moment(selectedDate).format('L')
+    await saveLicence({ id: values.user, dueDate })
+    handleClose()
     dispatch(reset('modadAddEdit'))
   }
   handleChange = name => event => {
@@ -61,8 +67,10 @@ class ModalAddEdit extends React.Component {
   render() {
     const {
       data: { open, handleClose, users },
-      handleSubmit
+      handleSubmit,
     } = this.props
+
+    const {selectedDate} = this.state
     return (
       <React.Fragment>
         <Dialog
@@ -75,15 +83,39 @@ class ModalAddEdit extends React.Component {
           <form onSubmit={handleSubmit(this.onSubmit)}>
             <DialogContent>
               <Row>
-                <Col md={6}>
-                  <Field name="user" component={renderSelectField} label="User">
-                    <option value="">--Seleccione--</option>
-                    {users
-                      ? users.users.map((user, i) => (
-                          <option value={user._id}>{user.email}</option>
-                        ))
-                      : null}
-                  </Field>
+                <Col md={4}>
+                  <label>Usuario</label>
+                  <div>
+                    <Field
+                      name="user"
+                      component={renderSelectField}
+                      label="User">
+                      <option value="">--Seleccione--</option>
+                      {users
+                        ? users.users.map((user, i) => (
+                            <option value={user._id}>{user.email}</option>
+                          ))
+                        : null}
+                    </Field>
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col
+                  md={4}
+                  style={{
+                    marginTop: 20
+                  }}>
+                  <label>Fecha de vencimiento</label>
+                  <div>
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
+                      <DatePicker
+                        value={selectedDate}
+                        onChange={this.handleDateChange}
+                        autoOk={true}
+                      />
+                    </MuiPickersUtilsProvider>
+                  </div>
                 </Col>
               </Row>
               <Row>
