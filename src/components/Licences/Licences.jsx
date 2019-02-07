@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import Table from '../Table'
 import { Row, Col } from 'react-bootstrap'
 import { withStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 import ModalAddEdit from './ModalAddEdit'
+import ListTable from './ListTable'
 
 const styles = theme => ({
   margin: {
@@ -33,12 +33,19 @@ class Licences extends Component {
   }
 
   async componentDidMount() {
-    const { fetchUsers } = this.props
+    const { fetchUsers, fetchLicences } = this.props
     await fetchUsers()
+    fetchLicences()
   }
   render() {
-    
-    const { classes, users, fetchUsers, saveLicence } = this.props
+    const {
+      classes,
+      users,
+      fetchUsers,
+      saveLicence,
+      fetchLicences,
+      licences: licences
+    } = this.props
     const { open } = this.state
     return (
       <div>
@@ -48,6 +55,7 @@ class Licences extends Component {
             handleClose: this.handleClose,
             users,
             fetchUsers,
+            fetchLicences,
             saveLicence
           }}
         />
@@ -65,7 +73,7 @@ class Licences extends Component {
         <div style={{ marginBottom: 102 }} />
         <Row>
           <Col md={{ span: 8, offset: 2 }}>
-            <Table />
+            <ListTable data={licences} />
           </Col>
         </Row>
       </div>

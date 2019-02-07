@@ -1,9 +1,12 @@
 import axios from 'axios'
-
+import _ from 'lodash'
 import {
   SAVE_LICENCE_REQUEST,
   SAVE_LICENCE_SUCCESS,
-  SAVE_LICENCE_ERROR
+  SAVE_LICENCE_ERROR, 
+  FETCH_LICENCES_REQUEST,
+  FETCH_LICENCES_SUCCESS,
+  FETCH_LICENCES_ERROR
 } from './actionTypes'
 
 import { request, received, error } from '../shared/redux/baseActions'
@@ -13,10 +16,10 @@ import Cookies from 'universal-cookie'
 const cookies = new Cookies()
 
 export const saveLicence = params => dispatch => {
-  const user = cookies.get('user')
-  const tokenStr = user.token
+  const userCookie = cookies.get('user')
+  const tokenStr = userCookie.token
   dispatch(received(SAVE_LICENCE_REQUEST))
-  const { id, dueDate } = params
+  const { user, dueDate, isActive } = params
   const axiosData = {
     method: 'POST',
     url: 'http://localhost:3001/v1/licences/',
@@ -26,15 +29,42 @@ export const saveLicence = params => dispatch => {
       Authorization: `${tokenStr}`
     },
     data: {
-      id,
+      user,
       dueDate,
-      user
+      isActive
     }
   }
   return axios(axiosData)
     .then(response => dispatch(received(SAVE_LICENCE_SUCCESS, response.data)))
+    .then(()=>{
+      //this.fetchLicences()
+    })
     .catch(err => {
       console.log('AXIOS ERROR:', err.response) // eslint-disable-line no-console
       dispatch(error(SAVE_LICENCE_ERROR))
+    })
+}
+
+export const fetchLicences = () => dispatch => {
+  const userInfo = cookies.get('user')
+  const tokenStr = userInfo.token
+  dispatch(request(FETCH_LICENCES_REQUEST))
+  const axiosData = {
+    method: 'GET',
+    url: 'http://localhost:3001/v1/licences',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `${tokenStr}`
+    }
+  }
+
+  return axios(axiosData)
+    .then(response => dispatch(received(FETCH_LICENCES_SUCCESS, response.data))).then(()=>{
+      //requestData()
+    })
+    .catch(err => {
+      console.log('AXIOS ERROR:', err.response) // eslint-disable-line no-console
+      dispatch(error(FETCH_LICENCES_ERROR))
     })
 }

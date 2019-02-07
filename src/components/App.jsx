@@ -5,16 +5,9 @@ import Content from '../shared/components/layout/Content'
 import { connect } from 'react-redux'
 import './App.css'
 import { bindActionCreators } from 'redux'
-import Cookies from 'universal-cookie'
 import { withRouter } from 'react-router'
 
 class App extends Component {
-  componentDidMount() {
-    const cookies = new Cookies()
-    if (!cookies.get('_session_user')) {
-      this.props.history.push('/login')
-    }
-  }
   render() {
     const {
       location: { pathname },

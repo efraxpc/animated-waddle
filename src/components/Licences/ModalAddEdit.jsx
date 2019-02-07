@@ -12,6 +12,8 @@ import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { DatePicker } from 'material-ui-pickers'
 import moment from 'moment'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
 
 const renderFromHelper = ({ touched, error }) => {
   if (!(touched && error)) {
@@ -42,7 +44,8 @@ const renderSelectField = ({
 )
 class ModalAddEdit extends React.Component {
   state = {
-    selectedDate: new Date()
+    selectedDate: new Date(),
+    isActive : false
   }
   handleDateChange = date => {
     this.setState({ selectedDate: date })
@@ -51,12 +54,14 @@ class ModalAddEdit extends React.Component {
     const {
       dispatch,
       reset,
-      data: { saveLicence, handleClose }
+      data: { saveLicence, handleClose, fetchLicences }
     } = this.props
-    const { selectedDate } = this.state
+    const { selectedDate, isActive } = this.state
     const dueDate = moment(selectedDate).format('L')
-    await saveLicence({ id: values.user, dueDate })
+    const user = values.user
+    await saveLicence({ user, dueDate, isActive })
     handleClose()
+    fetchLicences()
     dispatch(reset('modadAddEdit'))
   }
   handleChange = name => event => {
@@ -65,10 +70,10 @@ class ModalAddEdit extends React.Component {
   render() {
     const {
       data: { open, handleClose, users },
-      handleSubmit,
+      handleSubmit
     } = this.props
 
-    const {selectedDate} = this.state
+    const { selectedDate } = this.state
     return (
       <React.Fragment>
         <Dialog
@@ -77,7 +82,9 @@ class ModalAddEdit extends React.Component {
           maxWidth={'md'}
           fullWidth={true}
           aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Licencias de LABOCER SA</DialogTitle>
+          <DialogTitle id="form-dialog-title">
+            Licencias de LABOCER SA
+          </DialogTitle>
           <form onSubmit={handleSubmit(this.onSubmit)}>
             <DialogContent>
               <Row>
@@ -95,6 +102,23 @@ class ModalAddEdit extends React.Component {
                           ))
                         : null}
                     </Field>
+                  </div>
+                </Col>
+                <Col md={2}>
+                  <label>Opciones</label>
+                  <div>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={this.state.isActive}
+                          onChange={this.handleChange('isActive')}
+                          value="isActive"
+                          color="secondary"
+                          name={'atention'}
+                        />
+                      }
+                      label="Activo"
+                    />
                   </div>
                 </Col>
               </Row>
