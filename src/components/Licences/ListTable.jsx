@@ -45,7 +45,6 @@ function listTable(props) {
         <TableBody>
           {arrayLicences
             ? arrayLicences.map(row => {
-                console.log(row.isActive)
                 let isActiveIcon =
                   row.isActive === true ? (
                     <FaPowerOff color={'#6673b7'} />
@@ -55,7 +54,7 @@ function listTable(props) {
                 return (
                   <TableRow key={row.id}>
                     <TableCell component="th" scope="row">
-                      112355
+                      {row.key}
                     </TableCell>
                     <TableCell align="right">
                       {moment(row.dueDate).format('L')}
