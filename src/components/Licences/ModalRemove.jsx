@@ -6,12 +6,12 @@ import DialogContent from '@material-ui/core/DialogContent'
 import { Row, Col } from 'react-bootstrap'
 
 class ModalRemove extends React.Component {
-  handleSubmit = e => {
+  handleSubmit = async e => {
     const {
       data: { removeLicence, licence, handleClose, fetchLicences }
     } = this.props
     const id = licence.licence._id
-    removeLicence({id})
+    await removeLicence({ id })
     handleClose()
     fetchLicences()
   }
@@ -30,11 +30,15 @@ class ModalRemove extends React.Component {
           fullWidth={true}
           aria-labelledby="form-dialog-title">
           <DialogTitle id="form-dialog-title">
-            ¿Realmente desea remover licencias de LABOCER SA?
+            <Row>
+              <Col md={12}>
+                <p>¿Realmente desea remover licencias de LABOCER SA?</p>
+              </Col>
+            </Row>
           </DialogTitle>
           <DialogContent>
             <Row>
-              <Col md={{ span: 3, offset: 1 }}>
+              <Col md={{ span: 3, offset: 2 }}>
                 <Button
                   onClick={this.handleSubmit}
                   type="submit"
@@ -44,7 +48,7 @@ class ModalRemove extends React.Component {
                   Ok
                 </Button>
               </Col>
-              <Col md={6}>
+              <Col md={4}>
                 <Button
                   fullWidth
                   variant="contained"

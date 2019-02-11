@@ -9,7 +9,7 @@ import {
   FETCH_LICENCE_SUCCESS,
   UPDATE_LICENCE_REQUEST,
   UPDATE_LICENCE_SUCCESS,
-  UPDATE_LICENCE_ERROR, 
+  UPDATE_LICENCE_ERROR,
   REMOVE_LICENCE_REQUEST,
   REMOVE_LICENCE_SUCCESS,
   REMOVE_LICENCE_ERROR
@@ -19,14 +19,20 @@ import { getNewState } from '../shared/utils/frontend'
 
 const initialState = {
   licences: [],
-  licence: {}
+  licence: {},
+  licenceRemoved: false,
+  licenceUpdated: false,
+  licenceSaved: false
 }
 
 export default function licencesReducer(state = initialState, action) {
   switch (action.type) {
     case REQUEST_SHOW_MODAL: {
       return getNewState(state, {
-        licence: {}
+        licence: {},
+        licenceRemoved: false,
+        licenceUpdated: false,
+        licenceSaved: false
       })
     }
     case SAVE_LICENCE_REQUEST: {
@@ -59,16 +65,20 @@ export default function licencesReducer(state = initialState, action) {
     case UPDATE_LICENCE_SUCCESS: {
       const { payload: licence } = action
       return getNewState(state, {
-        licence
+        licence,
+        licenceUpdated: true
       })
     }
     case REMOVE_LICENCE_SUCCESS: {
-      return state
+      const { payload: licence } = action
+      return getNewState(state, {
+        licenceRemoved: licence.success
+      })
     }
     case REMOVE_LICENCE_ERROR: {
       return state
     }
-    
+
     default:
       return state
   }

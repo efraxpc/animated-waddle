@@ -33,7 +33,6 @@ export const updateLicence = params => dispatch => {
   const userCookie = cookies.get('user')
   const tokenStr = userCookie.token
   dispatch(received(UPDATE_LICENCE_REQUEST))
-  console.log('updating licence');
   const { user, dueDate, isActive, _id } = params
   const axiosData = {
     method: 'PATCH',
@@ -61,10 +60,8 @@ export const updateLicence = params => dispatch => {
 export const removeLicence = params => dispatch => {
   const userCookie = cookies.get('user')
   const tokenStr = userCookie.token
-  console.log('remobing licence');
   dispatch(received(REMOVE_LICENCE_REQUEST))
   const { id } = params
-  console.log(id);
   const axiosData = {
     method: 'DELETE',
     url: `${myConfig.API_URL}/licences/${id}`,

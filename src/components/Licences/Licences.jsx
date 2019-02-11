@@ -7,6 +7,7 @@ import ModalAddEdit from './ModalAddEdit'
 import ModalRemove from './ModalRemove'
 import ListTable from './ListTable'
 import ProjectSnackbar from '../Snackbar'
+import _ from 'lodash'
 
 const styles = theme => ({
   margin: {
@@ -57,16 +58,21 @@ class Licences extends Component {
   handleCloseModalAddEdit = async () => {
     const { licences,  requestShowModal } = this.props
     this.setState({ showModalAddEdit: false })
-    if (licences.licence.success) {
+    await requestShowModal()
+    if (licences.licenceUpdated === true) {
+      this.handleShowNotification({msg:'Licencia actualizada exitosamente'})
+    }else if(licences.licenceSaved === true) {
       this.handleShowNotification({msg:'Licencia creada exitosamente'})
     }
-    requestShowModal()
   }
 
   handleCloseModalRemove = async () => {
-    const { licences,  requestShowModal } = this.props
+    const {
+      licences,
+      requestShowModal
+    } = this.props
     this.setState({ showModalRemove: false })
-    if (licences.licence) {
+    if (licences.licenceRemoved === true) {
       this.handleShowNotification({msg:'Licencia eliminada exitosamente'})
     }
     requestShowModal()
