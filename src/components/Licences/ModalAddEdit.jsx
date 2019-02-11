@@ -103,15 +103,12 @@ class ModalAddEdit extends React.Component {
       handleSubmit
     } = this.props
     const { userSelectState, isActive, selectedDate } = this.state
-    console.log(licence);
     return (
       <React.Fragment>
         <Dialog
           onEntered={() => {
-            console.log('entering...');
             this.setState({ isEdit: false })
            if (!_.isEmpty(licence.licence)) {
-             console.log('esta lleno')
              this.setState({
                isActive: licence.licence.isActive,
                isEdit: true,
@@ -119,7 +116,6 @@ class ModalAddEdit extends React.Component {
                userSelectState: licence.licence.user,
                _id: licence.licence._id
              })
-             console.log(this.state)
            }
           }}
           open={showModal}

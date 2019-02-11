@@ -97,9 +97,7 @@ export const fetchLicences = () => dispatch => {
   }
 
   return axios(axiosData)
-    .then(response => dispatch(received(FETCH_LICENCES_SUCCESS, response.data))).then(()=>{
-      //requestData()
-    })
+    .then(response => dispatch(received(FETCH_LICENCES_SUCCESS, response.data)))
     .catch(err => {
       console.log('AXIOS ERROR:', err.response) // eslint-disable-line no-console
       dispatch(error(FETCH_LICENCES_ERROR))
@@ -123,6 +121,9 @@ export const fetchLicence = (params) => dispatch => {
 
   return axios(axiosData)
     .then(response => dispatch(received(FETCH_LICENCE_SUCCESS, response.data)))
+    .then(()=>{
+      fetchLicences()
+    })
     .catch(err => {
       console.log('AXIOS ERROR:', err.response) // eslint-disable-line no-console
       dispatch(error(FETCH_LICENCES_ERROR))
