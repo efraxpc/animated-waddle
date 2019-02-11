@@ -60,7 +60,6 @@ class LoginForm extends Component {
   render() {
     const { classes } = this.props
     const { handleSubmit } = this.props
-    console.log(this.props)
     return (
       <main className={classes.main}>
         <CssBaseline />
@@ -73,12 +72,12 @@ class LoginForm extends Component {
               name="email"
               type="text"
               component={CustomTextField}
-              label="Email"
+              label="Correo"
             />
             <Field
               name="password"
               type="password"
-              label="Password"
+              label="Contraseña"
               component={CustomTextField}
             />
             <Button
@@ -87,7 +86,7 @@ class LoginForm extends Component {
               variant="contained"
               color="primary"
               className={classes.submit}>
-              Sign in
+              Iniciar sesión
             </Button>
           </form>
         </Paper>
