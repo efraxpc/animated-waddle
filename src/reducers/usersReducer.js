@@ -3,7 +3,8 @@ import {
   FETCH_USERS_SUCCESS,
   FETCH_USERS_ERROR,
   FETCH_LOGIN_SUCCESS,
-  LAUNCH_LOGIN_USER
+  LAUNCH_LOGIN_USER,
+  FETCH_LOGIN_ERROR
 } from '../actions/actionTypes'
 
 import { getNewState } from '../shared/utils/frontend'
@@ -34,6 +35,11 @@ export default function usersReducer(state = initialState, action) {
     case LAUNCH_LOGIN_USER: {
       return omitDeep(state, ['user'])
     }
+    case FETCH_LOGIN_ERROR: {
+      console.log('its an error');
+      return state
+    }
+    
     default:
       return state
   }

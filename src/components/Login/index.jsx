@@ -16,7 +16,7 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <LoginForm loginAction={this.loginUser} />
+        <LoginForm data={{loginUser:this.loginUser}} />
       </div>
     )
   }

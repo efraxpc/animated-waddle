@@ -52,14 +52,15 @@ const CustomTextField = ({ input, label, type }) => (
 
 class LoginForm extends Component {
   onSubmit = values => {
-    const { loginAction, dispatch, reset } = this.props
-    dispatch(reset('todo'))
-    loginAction(values)
+    const { dispatch, reset, data:{ loginUser }} = this.props
+    dispatch(reset('login'))
+    loginUser(values)
   }
   renderInput = ({ input }) => <input {...input} type="text" />
   render() {
     const { classes } = this.props
     const { handleSubmit } = this.props
+    console.log(this.props)
     return (
       <main className={classes.main}>
         <CssBaseline />
@@ -97,6 +98,6 @@ class LoginForm extends Component {
 
 export default withStyles(styles)(
   reduxForm({
-    form: 'todo'
+    form: 'login'
   })(LoginForm)
 )
