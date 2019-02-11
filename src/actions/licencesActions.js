@@ -127,7 +127,7 @@ export const fetchLicences = () => dispatch => {
     })
 }
 
-export const fetchLicence = (params) => dispatch => {
+export const fetchLicence = params => dispatch => {
   const userInfo = cookies.get('user')
   const tokenStr = userInfo.token
   const {id} = params
