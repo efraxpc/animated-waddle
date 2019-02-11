@@ -8,7 +8,8 @@ import {
   fetchLicences,
   requestShowModal,
   fetchLicence,
-  updateLicence
+  updateLicence,
+  removeLicence
 } from '../../actions/licencesActions'
 
 const mapStateToProps = ({ users, licences, notification }) => ({
@@ -25,7 +26,8 @@ const mapDispatchToProps = dispatch =>
       saveLicence,
       requestShowModal,
       fetchLicence,
-      updateLicence
+      updateLicence,
+      removeLicence
     },
     dispatch
   )

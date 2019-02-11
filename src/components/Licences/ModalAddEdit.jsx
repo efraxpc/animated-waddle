@@ -4,7 +4,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import FormControl from '@material-ui/core/FormControl'
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form'
 import { Row, Col } from 'react-bootstrap'
 import Select from '@material-ui/core/Select'
 import FormHelperText from '@material-ui/core/FormHelperText'
@@ -71,7 +71,7 @@ class ModalAddEdit extends React.Component {
         isActive
       })
     } else {
-      updateLicence({
+      await updateLicence({
         user: userSelectState,
         dueDate,
         isActive,
@@ -99,7 +99,7 @@ class ModalAddEdit extends React.Component {
   }
   render() {
     const {
-      data: { showModal, handleClose, users, licence },
+      data: { showModalAddEdit, handleClose, users, licence },
       handleSubmit
     } = this.props
     const { userSelectState, isActive, selectedDate } = this.state
@@ -118,7 +118,7 @@ class ModalAddEdit extends React.Component {
              })
            }
           }}
-          open={showModal}
+          open={showModalAddEdit}
           onClose={()=>{
             handleClose()
           }}

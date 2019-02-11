@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Fab from '@material-ui/core/Fab'
 import AddIcon from '@material-ui/icons/Add'
 import ModalAddEdit from './ModalAddEdit'
+import ModalRemove from './ModalRemove'
 import ListTable from './ListTable'
 import ProjectSnackbar from '../Snackbar'
 
@@ -17,40 +18,59 @@ const styles = theme => ({
 })
 class Licences extends Component {
   state = {
-    showModal: false,
+    showModalAddEdit: false,
+    showModalRemove: false,
     showNotification: false,
     notificationMessage: ''
   }
 
-  handleClickOpenModal = async params => {
+  handleClickOpenModalAddEdit = async params => {
     const { id } = params
     const { requestShowModal, fetchLicence } = this.props
     await requestShowModal()
     if(id){
       await fetchLicence({id})
     }
-    this.setState({ showModal: true })
+    this.setState({ showModalAddEdit: true })
   }
 
-  handleShowNotification = () => {
+  handleClickOpenModalRemove = async params => {
+    const { id } = params
+    const { requestShowModal, fetchLicence } = this.props
+    await requestShowModal()
+    if(id){
+      await fetchLicence({id})
+    }
+    this.setState({ showModalRemove: true })
+  }
+
+  handleShowNotification = (params) => {
     this.setState({
       showNotification: true,
-      notificationMessage: 'Licencia creada exitosamente'
+      notificationMessage: params.msg 
     })
     setTimeout(() => {
       this.setState({ showNotification: false, notificationMessage: '' })
     }, 3000)
   }
 
-  handleClose = async () => {
+  handleCloseModalAddEdit = async () => {
     const { licences,  requestShowModal } = this.props
-    this.setState({ showModal: false })
+    this.setState({ showModalAddEdit: false })
     if (licences.licence.success) {
-      this.handleShowNotification()
+      this.handleShowNotification({msg:'Licencia creada exitosamente'})
     }
-    await requestShowModal()
+    requestShowModal()
   }
 
+  handleCloseModalRemove = async () => {
+    const { licences,  requestShowModal } = this.props
+    this.setState({ showModalRemove: false })
+    if (licences.licence) {
+      this.handleShowNotification({msg:'Licencia eliminada exitosamente'})
+    }
+    requestShowModal()
+  }
   async componentWillMount() {
     const { fetchUsers } = this.props
     await fetchUsers()
@@ -69,16 +89,17 @@ class Licences extends Component {
       saveLicence,
       fetchLicences,
       updateLicence,
+      removeLicence,
       licences: licences,
       licences: licence
     } = this.props
-    const { showModal, showNotification, notificationMessage } = this.state
+    const { showModalAddEdit, showModalRemove, showNotification, notificationMessage } = this.state
     return (
       <div>
         <ModalAddEdit
           data={{
-            showModal,
-            handleClose: this.handleClose,
+            showModalAddEdit,
+            handleClose: this.handleCloseModalAddEdit,
             users,
             licence,
             fetchUsers,
@@ -88,9 +109,19 @@ class Licences extends Component {
             handleShowNotification: this.handleShowNotification
           }}
         />
+        <ModalRemove
+          data={{
+            fetchLicences,
+            removeLicence,
+            licence,
+            showModalRemove,
+            handleClose: this.handleCloseModalRemove,
+            handleShowNotification: this.handleShowNotification
+          }}
+        />
         <div
           style={{ position: 'absolute', top: 89, zIndex: 2 }}
-          onClick={this.handleClickOpenModal}>
+          onClick={this.handleClickOpenModalAddEdit}>
           <Fab
             size="small"
             color="secondary"
@@ -123,7 +154,8 @@ class Licences extends Component {
               <Col md={{ span: 8, offset: 2 }}>
                 <ListTable
                   data={licences}
-                  handleClickOpenModal={this.handleClickOpenModal}
+                  handleClickOpenModalAddEdit={this.handleClickOpenModalAddEdit}
+                  handleClickOpenModalRemove={this.handleClickOpenModalRemove}
                 />
               </Col>
             </Row>

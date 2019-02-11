@@ -10,6 +10,9 @@ import {
   UPDATE_LICENCE_REQUEST,
   UPDATE_LICENCE_SUCCESS,
   UPDATE_LICENCE_ERROR, 
+  REMOVE_LICENCE_REQUEST,
+  REMOVE_LICENCE_SUCCESS,
+  REMOVE_LICENCE_ERROR
 } from '../actions/actionTypes'
 
 import { getNewState } from '../shared/utils/frontend'
@@ -59,6 +62,13 @@ export default function licencesReducer(state = initialState, action) {
         licence
       })
     }
+    case REMOVE_LICENCE_SUCCESS: {
+      return state
+    }
+    case REMOVE_LICENCE_ERROR: {
+      return state
+    }
+    
     default:
       return state
   }

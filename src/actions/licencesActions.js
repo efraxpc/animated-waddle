@@ -14,6 +14,9 @@ import {
   UPDATE_LICENCE_REQUEST,
   UPDATE_LICENCE_SUCCESS,
   UPDATE_LICENCE_ERROR, 
+  REMOVE_LICENCE_REQUEST,
+  REMOVE_LICENCE_SUCCESS,
+  REMOVE_LICENCE_ERROR
 } from './actionTypes'
 
 import { request, received, error } from '../shared/redux/baseActions'
@@ -55,6 +58,29 @@ export const updateLicence = params => dispatch => {
     })
 }
 
+export const removeLicence = params => dispatch => {
+  const userCookie = cookies.get('user')
+  const tokenStr = userCookie.token
+  console.log('remobing licence');
+  dispatch(received(REMOVE_LICENCE_REQUEST))
+  const { id } = params
+  console.log(id);
+  const axiosData = {
+    method: 'DELETE',
+    url: `${myConfig.API_URL}/licences/${id}`,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `${tokenStr}`
+    }
+  }
+  return axios(axiosData)
+    .then(response => dispatch(received(REMOVE_LICENCE_SUCCESS, response.data)))
+    .catch(err => {
+      console.log('AXIOS ERROR:', err.response) // eslint-disable-line no-console
+      dispatch(error(REMOVE_LICENCE_ERROR))
+    })
+}
 export const saveLicence = params => dispatch => {
   const userCookie = cookies.get('user')
   const tokenStr = userCookie.token

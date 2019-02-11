@@ -31,7 +31,7 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 function listTable(props) {
-  const { classes, data: licences , handleClickOpenModal} = props
+  const { classes, data: licences , handleClickOpenModalAddEdit, handleClickOpenModalRemove} = props
   const arrayLicences = licences.licences
   return (
     <Paper className={classes.root}>
@@ -73,11 +73,14 @@ function listTable(props) {
                         <FaPencilAlt color={'#6673b7'} 
                         onClick={(e)=>{
                           e.preventDefault()
-                          handleClickOpenModal({id:row._id})
+                          handleClickOpenModalAddEdit({id:row._id})
                         }} />
                       </a>
                       <a href="#">
-                        <FaTrash color={'#6673b7'} />
+                        <FaTrash color={'#6673b7'} onClick={(e)=>{
+                          e.preventDefault()
+                          handleClickOpenModalRemove({id:row._id})
+                        }}/>
                       </a>
                     </TableCell>
                   </TableRow>
