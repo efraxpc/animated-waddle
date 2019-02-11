@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Cookies from 'universal-cookie'
-
+import { myConfig } from '../config.js';
 import {
   FETCH_USERS_REQUEST,
   FETCH_USERS_SUCCESS,
@@ -21,7 +21,7 @@ export const fetchUsers = () => dispatch => {
   dispatch(request(FETCH_USERS_REQUEST))
   const axiosData = {
     method: 'GET',
-    url: 'http://178.128.78.139:3000/v1/users',
+    url: `${myConfig.API_URL}/users`,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ export const loginUser = params => dispatch => {
   const { email, password } = params
   const axiosData = {
     method: 'POST',
-    url: 'http://178.128.78.139:3000/v1/users/login',
+    url: `${myConfig.API_URL}/users/login`,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'

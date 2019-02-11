@@ -1,5 +1,6 @@
 import axios from 'axios'
 import _ from 'lodash'
+import { myConfig } from '../config.js';
 import {
   SAVE_LICENCE_REQUEST,
   SAVE_LICENCE_SUCCESS,
@@ -33,7 +34,7 @@ export const updateLicence = params => dispatch => {
   const { user, dueDate, isActive, _id } = params
   const axiosData = {
     method: 'PATCH',
-    url: 'http://178.128.78.139:3000/v1/licences/',
+    url: `${myConfig.API_URL}/licences/`,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -61,7 +62,7 @@ export const saveLicence = params => dispatch => {
   const { user, dueDate, isActive } = params
   const axiosData = {
     method: 'POST',
-    url: 'http://178.128.78.139:3000/v1/licences/',
+    url: `${myConfig.API_URL}/licences/`,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -87,7 +88,7 @@ export const fetchLicences = () => dispatch => {
   dispatch(request(FETCH_LICENCES_REQUEST))
   const axiosData = {
     method: 'GET',
-    url: 'http://178.128.78.139:3000/v1/licences',
+    url: `${myConfig.API_URL}/licences`,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -112,7 +113,7 @@ export const fetchLicence = (params) => dispatch => {
   dispatch(request(FETCH_LICENCE_REQUEST))
   const axiosData = {
     method: 'GET',
-    url: `http://178.128.78.139:3000/v1/licences/${id}`,
+    url: `${myConfig.API_URL}/licences/${id}`,
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
