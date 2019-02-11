@@ -103,6 +103,7 @@ class ModalAddEdit extends React.Component {
       handleSubmit
     } = this.props
     const { userSelectState, isActive, selectedDate } = this.state
+    console.log(licence);
     return (
       <React.Fragment>
         <Dialog

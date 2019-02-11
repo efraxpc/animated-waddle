@@ -46,6 +46,7 @@ export default function licencesReducer(state = initialState, action) {
     }
     case FETCH_LICENCE_SUCCESS: {
       const { payload: licence } = action
+      console.log(licence);
       return getNewState(state, {
         licence
       })
