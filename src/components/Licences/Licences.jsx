@@ -28,7 +28,7 @@ class Licences extends Component {
 
     await requestShowModal()
     if(id){
-      fetchLicence({id})
+      await fetchLicence({id})
     }
     this.setState({ showModal: true })
   }
