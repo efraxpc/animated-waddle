@@ -51,7 +51,7 @@ class ModalAddEdit extends React.Component {
     isActive: false,
     isEdit: false,
     userSelectState: '',
-    _id: ''
+    _id:''
   }
   handleDateChange = date => {
     this.setState({ selectedDate: date })
@@ -64,7 +64,7 @@ class ModalAddEdit extends React.Component {
     } = this.props
     const { selectedDate, isActive, userSelectState, isEdit, _id } = this.state
     const dueDate = moment(selectedDate).format('L')
-    if (isEdit === false) {
+    if (isEdit===false) {
       await saveLicence({
         user: userSelectState,
         dueDate,
@@ -89,7 +89,7 @@ class ModalAddEdit extends React.Component {
   handleChangeSelect = event => {
     this.setState({ [event.target.name]: event.target.value })
   }
-  habdleCloseModal = () => {
+  habdleCloseModal= ()=>{
     this.setState({
       selectedDate: new Date(),
       isActive: false,
@@ -97,40 +97,33 @@ class ModalAddEdit extends React.Component {
       userSelectState: ''
     })
   }
-  onEntered = () => {
-    const {
-      data: { showModal }
-    } = this.props
-    showModal()
-    
-  }
   render() {
     const {
       data: { showModal, handleClose, users, licence },
       handleSubmit
     } = this.props
     const { userSelectState, isActive, selectedDate } = this.state
-    console.log(licence)
+    console.log(licence);
     return (
       <React.Fragment>
         <Dialog
           onEntered={() => {
             console.log('entering...');
-             this.setState({ isEdit: false })
-            if (!_.isEmpty(licence.licence)) {
-              console.log('esta lleno')
-              this.setState({
-                isActive: licence.licence.isActive,
-                isEdit: true,
-                selectedDate: licence.licence.dueDate,
-                userSelectState: licence.licence.user,
-                _id: licence.licence._id
-              })
-              console.log(this.state)
-            }
+            this.setState({ isEdit: false })
+           if (!_.isEmpty(licence.licence)) {
+             console.log('esta lleno')
+             this.setState({
+               isActive: licence.licence.isActive,
+               isEdit: true,
+               selectedDate: licence.licence.dueDate,
+               userSelectState: licence.licence.user,
+               _id: licence.licence._id
+             })
+             console.log(this.state)
+           }
           }}
-          open={this.onEntered}
-          onClose={() => {
+          open={showModal}
+          onClose={()=>{
             handleClose()
           }}
           maxWidth={'md'}
