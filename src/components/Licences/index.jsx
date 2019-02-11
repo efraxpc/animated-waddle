@@ -3,11 +3,18 @@ import { bindActionCreators } from 'redux'
 
 import Licences from './Licences'
 import { fetchUsers } from '../../actions/usersActions'
-import { saveLicence, fetchLicences } from '../../actions/licencesActions'
+import {
+  saveLicence,
+  fetchLicences,
+  requestShowModal,
+  fetchLicence,
+  updateLicence
+} from '../../actions/licencesActions'
 
-const mapStateToProps = ({ users, licences }) => ({
+const mapStateToProps = ({ users, licences, notification }) => ({
   users,
-  licences
+  licences,
+  notification
 })
 
 const mapDispatchToProps = dispatch =>
@@ -15,12 +22,15 @@ const mapDispatchToProps = dispatch =>
     {
       fetchUsers,
       fetchLicences,
-      saveLicence
+      saveLicence,
+      requestShowModal,
+      fetchLicence,
+      updateLicence
     },
     dispatch
   )
 
-export default connect(
+  export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Licences)

@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import moment from 'moment'
-import { FaPowerOff } from 'react-icons/fa'
+import { FaPowerOff, FaTrash, FaPencilAlt } from 'react-icons/fa'
 
 const styles = theme => ({
   root: {
@@ -18,6 +18,9 @@ const styles = theme => ({
   },
   table: {
     minWidth: 700
+  },
+  margin: {
+    margin: theme.spacing.unit
   }
 })
 
@@ -28,7 +31,7 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 function listTable(props) {
-  const { classes, data: licences } = props
+  const { classes, data: licences , handleClickOpenModal} = props
   const arrayLicences = licences.licences
   return (
     <Paper className={classes.root}>
@@ -40,6 +43,7 @@ function listTable(props) {
             <TableCell align="right">Usuario</TableCell>
             <TableCell align="right">Activo</TableCell>
             <TableCell align="right">Fecha de creación</TableCell>
+            <TableCell align="right">Acciones</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -52,7 +56,7 @@ function listTable(props) {
                     <FaPowerOff color={'#cfd1d3'} />
                   )
                 return (
-                  <TableRow key={row.id}>
+                  <TableRow key={row._id}>
                     <TableCell component="th" scope="row">
                       {row.key}
                     </TableCell>
@@ -61,7 +65,21 @@ function listTable(props) {
                     </TableCell>
                     <TableCell align="right">{row.user[0].email}</TableCell>
                     <TableCell align="right">{isActiveIcon}</TableCell>
-                    <TableCell align="right">{moment(row.createdAt).format('L')}</TableCell>
+                    <TableCell align="right">
+                      {moment(row.createdAt).format('L')}
+                    </TableCell>
+                    <TableCell align="right">
+                      <a href="#">
+                        <FaPencilAlt color={'#6673b7'} 
+                        onClick={(e)=>{
+                          e.preventDefault()
+                          handleClickOpenModal({id:row._id})
+                        }} />
+                      </a>
+                      <a href="#">
+                        <FaTrash color={'#6673b7'} />
+                      </a>
+                    </TableCell>
                   </TableRow>
                 )
               })

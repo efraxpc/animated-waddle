@@ -14,6 +14,9 @@ import { DatePicker } from 'material-ui-pickers'
 import moment from 'moment'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
+import InputLabel from '@material-ui/core/InputLabel'
+import MenuItem from '@material-ui/core/MenuItem'
+import _ from 'lodash'
 
 const renderFromHelper = ({ touched, error }) => {
   if (!(touched && error)) {
@@ -45,7 +48,10 @@ const renderSelectField = ({
 class ModalAddEdit extends React.Component {
   state = {
     selectedDate: new Date(),
-    isActive : false
+    isActive: false,
+    isEdit: false,
+    userSelectState: '',
+    _id:''
   }
   handleDateChange = date => {
     this.setState({ selectedDate: date })
@@ -54,12 +60,25 @@ class ModalAddEdit extends React.Component {
     const {
       dispatch,
       reset,
-      data: { saveLicence, handleClose, fetchLicences }
+      data: { saveLicence, handleClose, fetchLicences, updateLicence }
     } = this.props
-    const { selectedDate, isActive } = this.state
+    const { selectedDate, isActive, userSelectState, isEdit, _id } = this.state
     const dueDate = moment(selectedDate).format('L')
-    const user = values.user
-    await saveLicence({ user, dueDate, isActive })
+    if (isEdit===false) {
+      await saveLicence({
+        user: userSelectState,
+        dueDate,
+        isActive
+      })
+    } else {
+      updateLicence({
+        user: userSelectState,
+        dueDate,
+        isActive,
+        _id
+      })
+    }
+
     handleClose()
     fetchLicences()
     dispatch(reset('modadAddEdit'))
@@ -67,18 +86,42 @@ class ModalAddEdit extends React.Component {
   handleChange = name => event => {
     this.setState({ [name]: event.target.checked })
   }
+  handleChangeSelect = event => {
+    this.setState({ [event.target.name]: event.target.value })
+  }
+  habdleCloseModal= ()=>{
+    this.setState({
+      selectedDate: new Date(),
+      isActive: false,
+      isEdit: false,
+      userSelectState: ''
+    })
+  }
   render() {
     const {
-      data: { open, handleClose, users },
+      data: { showModal, handleClose, users, licence },
       handleSubmit
     } = this.props
-
-    const { selectedDate } = this.state
+    const { userSelectState, isActive, selectedDate } = this.state
     return (
       <React.Fragment>
         <Dialog
-          open={open}
-          onClose={handleClose}
+          onEntered={async () => {
+            await this.setState({isEdit:false})
+            if (!_.isEmpty(licence.licence)) {
+              this.setState({
+                isActive: licence.licence.isActive,
+                isEdit: true,
+                selectedDate: licence.licence.dueDate,
+                userSelectState: licence.licence.user,
+                _id: licence.licence._id
+              })
+            }
+          }}
+          open={showModal}
+          onClose={()=>{
+            handleClose()
+          }}
           maxWidth={'md'}
           fullWidth={true}
           aria-labelledby="form-dialog-title">
@@ -91,17 +134,24 @@ class ModalAddEdit extends React.Component {
                 <Col md={4}>
                   <label>Usuario</label>
                   <div>
-                    <Field
-                      name="user"
-                      component={renderSelectField}
-                      label="User">
-                      <option value="">--Seleccione--</option>
-                      {users
-                        ? users.users.map((user, i) => (
-                            <option value={user._id}>{user.email}</option>
-                          ))
-                        : null}
-                    </Field>
+                    <FormControl style={{ minWidth: 120 }}>
+                      <InputLabel htmlFor="userSelectValue-simple">
+                        Seleccione
+                      </InputLabel>
+                      <Select
+                        value={userSelectState}
+                        onChange={this.handleChangeSelect}
+                        inputProps={{
+                          name: 'userSelectState',
+                          id: 'user-simple'
+                        }}>
+                        {users
+                          ? users.users.map((user, i) => (
+                              <MenuItem value={user._id}>{user.email}</MenuItem>
+                            ))
+                          : null}
+                      </Select>
+                    </FormControl>
                   </div>
                 </Col>
                 <Col md={2}>
@@ -110,9 +160,9 @@ class ModalAddEdit extends React.Component {
                     <FormControlLabel
                       control={
                         <Switch
-                          checked={this.state.isActive}
+                          checked={isActive}
                           onChange={this.handleChange('isActive')}
-                          value="isActive"
+                          value={isActive}
                           color="secondary"
                           name={'atention'}
                         />
@@ -152,7 +202,6 @@ class ModalAddEdit extends React.Component {
                 </Col>
                 <Col md={2}>
                   <Button
-                    type="submit"
                     fullWidth
                     variant="contained"
                     color="secondary"
