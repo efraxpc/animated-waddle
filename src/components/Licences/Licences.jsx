@@ -38,7 +38,7 @@ class Licences extends Component {
   handleClickOpenModalRemove = async params => {
     const { id } = params
     const { requestShowModal, fetchLicence } = this.props
-    await requestShowModal()
+    requestShowModal()    
     if(id){
       await fetchLicence({id})
     }

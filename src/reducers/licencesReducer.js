@@ -39,7 +39,9 @@ export default function licencesReducer(state = initialState, action) {
       return state
     }
     case SAVE_LICENCE_SUCCESS: {
-      return state
+      return getNewState(state, {
+        licenceSaved:true
+      })
     }
     case FETCH_LICENCES_REQUEST: {
       return state

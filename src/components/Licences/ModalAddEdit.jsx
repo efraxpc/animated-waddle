@@ -45,43 +45,61 @@ const renderSelectField = ({
     {renderFromHelper({ touched, error })}
   </FormControl>
 )
+
+const initialState = {
+  selectedDate: new Date(),
+  isActive: false,
+  isEdit: false,
+  userSelectState: '',
+  _id: ''
+}
+
 class ModalAddEdit extends React.Component {
   state = {
     selectedDate: new Date(),
     isActive: false,
     isEdit: false,
     userSelectState: '',
-    _id:''
+    _id: ''
   }
   handleDateChange = date => {
     this.setState({ selectedDate: date })
   }
   onSubmit = async values => {
-    const {
-      dispatch,
-      reset,
-      data: { saveLicence, handleClose, fetchLicences, updateLicence }
-    } = this.props
-    const { selectedDate, isActive, userSelectState, isEdit, _id } = this.state
-    const dueDate = moment(selectedDate).format('L')
-    if (isEdit===false) {
-      await saveLicence({
-        user: userSelectState,
-        dueDate,
-        isActive
-      })
-    } else {
-      await updateLicence({
-        user: userSelectState,
-        dueDate,
+    const isValid = this.validate()
+    if (isValid) {
+      const {
+        dispatch,
+        reset,
+        data: { saveLicence, handleClose, fetchLicences, updateLicence }
+      } = this.props
+      const {
+        selectedDate,
         isActive,
+        userSelectState,
+        isEdit,
         _id
-      })
-    }
+      } = this.state
+      const dueDate = moment(selectedDate).format('L')
+      if (isEdit === false) {
+        await saveLicence({
+          user: userSelectState,
+          dueDate,
+          isActive
+        })
+      } else {
+        await updateLicence({
+          user: userSelectState,
+          dueDate,
+          isActive,
+          _id
+        })
+      }
 
-    handleClose()
-    fetchLicences()
-    dispatch(reset('modadAddEdit'))
+      handleClose()
+      await fetchLicences()
+      this.setState(initialState)
+    }
   }
   handleChange = name => event => {
     this.setState({ [name]: event.target.checked })
@@ -89,13 +107,24 @@ class ModalAddEdit extends React.Component {
   handleChangeSelect = event => {
     this.setState({ [event.target.name]: event.target.value })
   }
-  habdleCloseModal= ()=>{
+  habdleCloseModal = () => {
     this.setState({
       selectedDate: new Date(),
       isActive: false,
       isEdit: false,
       userSelectState: ''
     })
+  }
+  validate = () => {
+    let userError = ''
+    if (!this.state.userSelectState) {
+      userError = 'Por favor seleccione un usuario'
+    }
+    if (userError) {
+      this.setState({ userError })
+      return false
+    }
+    return true
   }
   render() {
     const {
@@ -108,18 +137,19 @@ class ModalAddEdit extends React.Component {
         <Dialog
           onEntered={() => {
             this.setState({ isEdit: false })
-           if (!_.isEmpty(licence.licence)) {
-             this.setState({
-               isActive: licence.licence.isActive,
-               isEdit: true,
-               selectedDate: licence.licence.dueDate,
-               userSelectState: licence.licence.user,
-               _id: licence.licence._id
-             })
-           }
+            if (!_.isEmpty(licence.licence)) {
+              this.setState({
+                isActive: licence.licence.isActive,
+                isEdit: true,
+                selectedDate: licence.licence.dueDate,
+                userSelectState: licence.licence.user,
+                _id: licence.licence._id
+              })
+            }
           }}
           open={showModalAddEdit}
-          onClose={()=>{
+          onClose={() => {
+            this.setState(initialState)
             handleClose()
           }}
           maxWidth={'md'}
@@ -151,6 +181,9 @@ class ModalAddEdit extends React.Component {
                             ))
                           : null}
                       </Select>
+                      <div style={{ fontSize: 12, color: 'red' }}>
+                        {this.state.nameError}
+                      </div>
                     </FormControl>
                   </div>
                 </Col>
