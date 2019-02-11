@@ -69,8 +69,6 @@ class ModalAddEdit extends React.Component {
     const isValid = this.validate()
     if (isValid) {
       const {
-        dispatch,
-        reset,
         data: { saveLicence, handleClose, fetchLicences, updateLicence }
       } = this.props
       const {
@@ -124,6 +122,7 @@ class ModalAddEdit extends React.Component {
       this.setState({ userError })
       return false
     }
+    
     return true
   }
   render() {

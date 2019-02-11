@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import FormControl from '@material-ui/core/FormControl'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Paper from '@material-ui/core/Paper'
 import withStyles from '@material-ui/core/styles/withStyles'
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form'
+import TextField from '@material-ui/core/TextField'
+import classNames from 'classnames'
+import { Row, Col } from 'react-bootstrap'
 
 const styles = theme => ({
   main: {
@@ -30,6 +30,9 @@ const styles = theme => ({
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
       .spacing.unit * 3}px`
   },
+  dense: {
+    marginTop: 19
+  },
   avatar: {
     margin: theme.spacing.unit,
     backgroundColor: theme.palette.secondary.main
@@ -43,20 +46,48 @@ const styles = theme => ({
   }
 })
 
-const CustomTextField = ({ input, label, type }) => (
-  <FormControl margin="normal" required fullWidth>
-    <InputLabel htmlFor="email">{label}</InputLabel>
-    <Input type={type} {...input} />
-  </FormControl>
-)
+const initialState = {
+  userMail: '',
+  password: ''
+}
 
 class LoginForm extends Component {
-  onSubmit = values => {
-    const { dispatch, reset, data:{ loginUser }} = this.props
-    dispatch(reset('login'))
-    loginUser(values)
+  state = {
+    userMail: '',
+    password: ''
+  }
+  onSubmit = () => {
+    const isValid = this.validate()
+    const {
+      data: { loginUser }
+    } = this.props
+    const { userMail, password } = this.state
+    if (isValid) {
+      loginUser({ email: userMail, password })
+      this.setState(initialState)
+    }
   }
   renderInput = ({ input }) => <input {...input} type="text" />
+  validate = () => {
+    let emailError = ''
+    let passwordError = ''
+    if (!this.state.userMail.includes('@')) {
+      emailError = 'Por favor ingrese un correo válido'
+    }
+
+    if (!this.state.password) {
+      passwordError = 'Por favor ingrese una contraseña'
+    }
+
+    if (emailError || passwordError) {
+      this.setState({ emailError, passwordError })
+      return false
+    }
+    return true
+  }
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value })
+  }
   render() {
     const { classes } = this.props
     const { handleSubmit } = this.props
@@ -68,18 +99,38 @@ class LoginForm extends Component {
             <LockOutlinedIcon />
           </Avatar>
           <form className={classes.form} onSubmit={handleSubmit(this.onSubmit)}>
-            <Field
-              name="email"
-              type="text"
-              component={CustomTextField}
-              label="Correo"
-            />
-            <Field
-              name="password"
-              type="password"
-              label="Contraseña"
-              component={CustomTextField}
-            />
+            <Row>
+              <Col md={12}>
+                <TextField
+                  id="standard-dense"
+                  label="Correo *"
+                  className={classNames(classes.textField, classes.dense)}
+                  style={{width:'100%'}}
+                  margin="dense"
+                  name={'userMail'}
+                  onChange={this.handleChange}
+                />
+                <div style={{ fontSize: 12, color: 'red' }}>
+                  {this.state.emailError}
+                </div>
+              </Col>
+              <Col md={12}>
+                <TextField
+                  id="standard-password-input"
+                  label="Contraseña *"
+                  className={classes.textField}
+                  type="password"
+                  autoComplete="current-password"
+                  margin="normal"
+                  style={{width:'100%'}}
+                  name={'password'}
+                  onChange={this.handleChange}
+                />
+                <div style={{ fontSize: 12, color: 'red' }}>
+                  {this.state.passwordError}
+                </div>
+              </Col>
+            </Row>
             <Button
               type="submit"
               fullWidth
