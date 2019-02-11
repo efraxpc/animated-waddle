@@ -26,7 +26,7 @@ class Licences extends Component {
     const { id } = params
     const { requestShowModal, fetchLicence } = this.props
     if(id){
-      fetchLicence({id})
+      await fetchLicence({id})
     }
     await requestShowModal()
 
