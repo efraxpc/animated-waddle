@@ -97,6 +97,13 @@ class ModalAddEdit extends React.Component {
       userSelectState: ''
     })
   }
+  isEmpty = (obj) =>{
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
   render() {
     const {
       data: { showModal, handleClose, users, licence },
@@ -109,7 +116,7 @@ class ModalAddEdit extends React.Component {
         <Dialog
           onEntered={async () => {
             await this.setState({isEdit:false})
-            if (!_.isEmpty(licence.licence)) {
+            if (!this.isEmpty(licence.licence)) {
               console.log('esta lleno');
               this.setState({
                 isActive: licence.licence.isActive,
