@@ -25,11 +25,11 @@ class Licences extends Component {
   handleClickOpenModal = async params => {
     const { id } = params
     const { requestShowModal, fetchLicence } = this.props
-    if(id){
-      await fetchLicence({id})
-    }
-    await requestShowModal()
 
+    await requestShowModal()
+    if(id){
+      fetchLicence({id})
+    }
     this.setState({ showModal: true })
   }
 

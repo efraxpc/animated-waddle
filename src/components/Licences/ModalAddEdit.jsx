@@ -97,25 +97,20 @@ class ModalAddEdit extends React.Component {
       userSelectState: ''
     })
   }
-  isEmpty = (obj) => {
-    for(var key in obj) {
-        if(obj.hasOwnProperty(key))
-            return false;
-    }
-    return true;
-}
   render() {
     const {
       data: { showModal, handleClose, users, licence },
       handleSubmit
     } = this.props
     const { userSelectState, isActive, selectedDate } = this.state
+    console.log(licence);
     return (
       <React.Fragment>
         <Dialog
           onEntered={() => {
             console.log('entering...');
-           if (!this.isEmpty(licence.licence)) {
+            this.setState({ isEdit: false })
+           if (!_.isEmpty(licence.licence)) {
              console.log('esta lleno')
              this.setState({
                isActive: licence.licence.isActive,
@@ -126,8 +121,6 @@ class ModalAddEdit extends React.Component {
              })
              console.log(this.state)
            }
-           this.setState({ isEdit: false })
-
           }}
           open={showModal}
           onClose={()=>{
