@@ -46,8 +46,7 @@ export const resetLoginErrors = () => dispatch => {
   return dispatch(received(REQUEST_RESET_LOGIN_ERRORS))
 }
 
-export const loginUser = params => async dispatch => {
-  dispatch(received(REQUEST_LOGIN_USER))
+export const loginUser = params => dispatch => {
   const { email, password } = params
   const axiosData = {
     method: 'POST',
@@ -62,12 +61,13 @@ export const loginUser = params => async dispatch => {
     }
   }
   return axios(axiosData)
-    .then(response => dispatch(received(FETCH_LOGIN_SUCCESS), response.data))
+    .then(response => dispatch(received(FETCH_LOGIN_SUCCESS, response.data)))
     .then(data => {
       const { payload } = data
       cookies.set('user', payload)
     })
     .catch(err => {
+      console.log('AXIOS ERROR:', err.response) // eslint-disable-line no-console
       dispatch(error(FETCH_LOGIN_ERROR))
     })
 }
