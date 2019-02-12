@@ -5,10 +5,10 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Paper from '@material-ui/core/Paper'
 import withStyles from '@material-ui/core/styles/withStyles'
-import { reduxForm } from 'redux-form'
 import TextField from '@material-ui/core/TextField'
 import classNames from 'classnames'
 import { Row, Col } from 'react-bootstrap'
+import { withRouter } from 'react-router'
 
 const styles = theme => ({
   main: {
@@ -46,25 +46,24 @@ const styles = theme => ({
   }
 })
 
-const initialState = {
-  userMail: '',
-  password: ''
-}
-
 class LoginForm extends Component {
   state = {
     userMail: '',
     password: ''
   }
-  onSubmit = () => {
+  onSubmit = async (e) => {
+    e.preventDefault()
     const isValid = this.validate()
     const {
-      data: { loginUser }
+      data: { loginUser},
+      history
     } = this.props
     const { userMail, password } = this.state
     if (isValid) {
-      loginUser({ email: userMail, password })
-      this.setState(initialState)
+      await loginUser({ email: userMail, password })
+      if (!this.props.data.users.loginError === true) {      
+        history.push('/')
+      }
     }
   }
   renderInput = ({ input }) => <input {...input} type="text" />
@@ -87,10 +86,15 @@ class LoginForm extends Component {
   }
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value })
+    if(event.target.name === 'password'){
+      this.setState({ passwordError: '' })
+    }
+    if(event.target.name === 'userMail'){
+      this.setState({ emailError: '' })
+    }
   }
   render() {
     const { classes } = this.props
-    const { handleSubmit } = this.props
     return (
       <main className={classes.main}>
         <CssBaseline />
@@ -98,14 +102,14 @@ class LoginForm extends Component {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <form className={classes.form} onSubmit={handleSubmit(this.onSubmit)}>
+          <form className={classes.form} onSubmit={this.onSubmit}>
             <Row>
               <Col md={12}>
                 <TextField
                   id="standard-dense"
                   label="Correo *"
                   className={classNames(classes.textField, classes.dense)}
-                  style={{width:'100%'}}
+                  style={{ width: '100%' }}
                   margin="dense"
                   name={'userMail'}
                   onChange={this.handleChange}
@@ -122,7 +126,7 @@ class LoginForm extends Component {
                   type="password"
                   autoComplete="current-password"
                   margin="normal"
-                  style={{width:'100%'}}
+                  style={{ width: '100%' }}
                   name={'password'}
                   onChange={this.handleChange}
                 />
@@ -131,6 +135,11 @@ class LoginForm extends Component {
                 </div>
               </Col>
             </Row>
+            {this.props.data.users.loginError === true && (
+              <div style={{ fontSize: 12, color: 'red' }}>
+                <h6>{this.props.data.users.errorMsg}</h6>
+              </div>
+            )}
             <Button
               type="submit"
               fullWidth
@@ -145,9 +154,4 @@ class LoginForm extends Component {
     )
   }
 }
-
-export default withStyles(styles)(
-  reduxForm({
-    form: 'login'
-  })(LoginForm)
-)
+export default withRouter(withStyles(styles)(LoginForm))

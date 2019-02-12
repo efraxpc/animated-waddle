@@ -1,9 +1,8 @@
 import {
   FETCH_USERS_REQUEST,
   FETCH_USERS_SUCCESS,
-  FETCH_USERS_ERROR,
   FETCH_LOGIN_SUCCESS,
-  LAUNCH_LOGIN_USER,
+  REQUEST_LOGIN_USER,
   FETCH_LOGIN_ERROR
 } from '../actions/actionTypes'
 
@@ -12,7 +11,9 @@ const omitDeep = require('omit-deep-lodash')
 
 const initialState = {
   users: [],
-  user: {}
+  user: {},
+  loginError: false,
+  errorMsg: ''
 }
 
 export default function usersReducer(state = initialState, action) {
@@ -29,17 +30,20 @@ export default function usersReducer(state = initialState, action) {
     case FETCH_LOGIN_SUCCESS: {
       const { payload: user } = action
       return getNewState(state, {
-        user
+        user,
+        loginError: false,
+        errorMsg: ''
       })
     }
-    case LAUNCH_LOGIN_USER: {
+    case REQUEST_LOGIN_USER: {
       return omitDeep(state, ['user'])
     }
     case FETCH_LOGIN_ERROR: {
-      console.log('its an error');
-      return state
+      return getNewState(state, {
+        loginError: true,
+        errorMsg: 'Usuario o contraseña inválidos'
+      })
     }
-    
     default:
       return state
   }

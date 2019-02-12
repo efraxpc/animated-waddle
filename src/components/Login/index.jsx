@@ -6,17 +6,14 @@ import { bindActionCreators } from 'redux'
 import LoginForm from './LoginForm'
 
 class Login extends Component {
-  loginUser = async values => {
-    await this.props.loginUser(values)
-    if (this.props.users.user) {
-      this.props.history.push('/')
-    }
-  }
 
   render() {
+    const { users, errors, loginUser } = this.props
     return (
       <div>
-        <LoginForm data={{loginUser:this.loginUser}} />
+        <LoginForm
+          data={{ loginUser: loginUser, users }}
+        />
       </div>
     )
   }

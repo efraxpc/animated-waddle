@@ -1,11 +1,11 @@
 import axios from 'axios'
 import Cookies from 'universal-cookie'
-import { myConfig } from '../config.js';
+import { myConfig } from '../config.js'
 import {
   FETCH_USERS_REQUEST,
   FETCH_USERS_SUCCESS,
   FETCH_USERS_ERROR,
-  LAUNCH_LOGIN_USER,
+  REQUEST_LOGIN_USER,
   FETCH_LOGIN_SUCCESS,
   FETCH_USER,
   FETCH_LOGIN_ERROR
@@ -41,8 +41,8 @@ export const fetchUser = () => dispatch => {
   return dispatch(received(FETCH_USER))
 }
 
-export const loginUser = params => dispatch => {
-  dispatch(received(LAUNCH_LOGIN_USER))
+export const loginUser = params => async dispatch => {
+  dispatch(received(REQUEST_LOGIN_USER))
   const { email, password } = params
   const axiosData = {
     method: 'POST',
@@ -57,13 +57,12 @@ export const loginUser = params => dispatch => {
     }
   }
   return axios(axiosData)
-    .then(response => dispatch(received(FETCH_LOGIN_SUCCESS, response.data)))
+    .then(response => dispatch(received(FETCH_LOGIN_SUCCESS), response.data))
     .then(data => {
       const { payload } = data
       cookies.set('user', payload)
     })
     .catch(err => {
-      console.log('AXIOS ERROR:', err.response) // eslint-disable-line no-console
       dispatch(error(FETCH_LOGIN_ERROR))
     })
 }
