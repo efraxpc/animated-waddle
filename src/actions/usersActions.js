@@ -8,7 +8,8 @@ import {
   REQUEST_LOGIN_USER,
   FETCH_LOGIN_SUCCESS,
   FETCH_USER,
-  FETCH_LOGIN_ERROR
+  FETCH_LOGIN_ERROR,
+  REQUEST_RESET_LOGIN_ERRORS
 } from './actionTypes'
 
 import { request, received, error } from '../shared/redux/baseActions'
@@ -39,6 +40,10 @@ export const fetchUsers = () => dispatch => {
 
 export const fetchUser = () => dispatch => {
   return dispatch(received(FETCH_USER))
+}
+
+export const resetLoginErrors = () => dispatch => {
+  return dispatch(received(REQUEST_RESET_LOGIN_ERRORS))
 }
 
 export const loginUser = params => async dispatch => {

@@ -3,7 +3,8 @@ import {
   FETCH_USERS_SUCCESS,
   FETCH_LOGIN_SUCCESS,
   REQUEST_LOGIN_USER,
-  FETCH_LOGIN_ERROR
+  FETCH_LOGIN_ERROR,
+  REQUEST_RESET_LOGIN_ERRORS
 } from '../actions/actionTypes'
 
 import { getNewState } from '../shared/utils/frontend'
@@ -42,6 +43,12 @@ export default function usersReducer(state = initialState, action) {
       return getNewState(state, {
         loginError: true,
         errorMsg: 'Usuario o contraseña inválidos'
+      })
+    }
+    case REQUEST_RESET_LOGIN_ERRORS:{
+      return getNewState(state, {
+        loginError: false,
+        errorMsg: ''
       })
     }
     default:

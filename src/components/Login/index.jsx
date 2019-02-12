@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { loginUser } from '../../actions/usersActions'
+import { loginUser, resetLoginErrors } from '../../actions/usersActions'
 import { bindActionCreators } from 'redux'
 // Components
 import LoginForm from './LoginForm'
@@ -8,11 +8,11 @@ import LoginForm from './LoginForm'
 class Login extends Component {
 
   render() {
-    const { users, errors, loginUser } = this.props
+    const { users, loginUser, resetLoginErrors } = this.props
     return (
       <div>
         <LoginForm
-          data={{ loginUser: loginUser, users }}
+          data={{ loginUser, users, resetLoginErrors }}
         />
       </div>
     )
@@ -26,7 +26,8 @@ const mapStateToProps = ({ users }) => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      loginUser
+      loginUser,
+      resetLoginErrors
     },
     dispatch
   )

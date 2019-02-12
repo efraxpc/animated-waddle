@@ -92,6 +92,7 @@ class LoginForm extends Component {
     if(event.target.name === 'userMail'){
       this.setState({ emailError: '' })
     }
+    this.props.data.resetLoginErrors()
   }
   render() {
     const { classes } = this.props
